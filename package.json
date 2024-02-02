@@ -9,9 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.3.11"
+    "pinia": "^2.0.33",
+    "v-code-diff": "^1.9.0",
+    "vite-plugin-pages": "^0.32.0",
+    "vue": "^3.3.11",
+    "vue-router": "^4.0.13",
+    "vuetify": "^3.1.12"
   },
   "devDependencies": {
+    "@types/node": "^20.6.3",
     "@vitejs/plugin-vue": "^4.5.2",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
