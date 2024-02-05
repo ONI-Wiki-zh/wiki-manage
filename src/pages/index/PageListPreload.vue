@@ -1,6 +1,11 @@
 <template>
-    <h2>PageListPreload</h2>
-</template>
-
-<script>
-</script>
+    <PageList :ns="10"></PageList>
+  </template>
+  <script>
+  import PageList from '@src/components/PageList.vue'
+  export default{
+    components:{
+      PageList
+    }
+  }
+  </script>
