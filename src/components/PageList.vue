@@ -8,13 +8,16 @@
         <v-icon v-if="itemFilter !== ''" @click="resetFilter">mdi-close</v-icon>
       </template>
     </v-text-field>
-    <v-data-table :headers="headers" :items="pageItems" item-key="id" items-per-page="20">
+    <slot></slot>
+    <v-data-table :headers="headers" :items="pageItems" item-key="id" items-per-page="20" :sort-by="[]" multi-sort>
       <template v-slot:item.title="{ item }">
         <span>
           <span>{{ item.title }}</span>
-          <v-spacer></v-spacer>
-          <a :href="`${WikiSite.baseUrl}${item.title}`" target="_blank" color="black"><v-icon color="black">mdi-link</v-icon></a>
-          <a v-if="pageDocTitles[item.id]" :href="getDocUrl(item)" target="_blank"><v-icon>mdi-help-circle-outline</v-icon></a>
+          <span>&nbsp;</span>
+          <a :href="`${WikiSite.baseUrl}${item.title}`" target="_blank" style="color:black"><v-icon
+              color="black">mdi-link</v-icon></a>
+          <a v-if="pageDocTitles[item.id]" :href="getDocUrl(item)"
+            target="_blank"><v-icon>mdi-help-circle-outline</v-icon></a>
         </span>
       </template>
       <template v-slot:item.contributorName="{ item }">
@@ -43,6 +46,7 @@ import axios from 'axios';
 import { API, WikiSite } from '@src/constant'
 import VueAvatar from "@webzlodimir/vue-avatar";
 import "@webzlodimir/vue-avatar/dist/style.css";
+import { el, fa } from 'vuetify/locale';
 export default {
   components: {
     VueAvatar,
@@ -52,11 +56,15 @@ export default {
       type: Number,
       required: false
     },
+    filterFunc: {
+      type: Function,
+      required: true
+    },
   },
   data: () => ({
     headers: [
       { title: '名称', key: 'title', width: "15%" },
-      { title: '上次编辑者', key: 'contributorName' },
+      { title: '上次编辑者', key: 'contributorName', minWidth:"100px" },
       { title: '上次编辑时间', key: 'latest_timestamp' },
       { title: '提交信息', key: 'comment', width: "40%" },
       { title: '操作', key: 'action', align: "center", sortable: false }
@@ -89,19 +97,39 @@ export default {
         "contributorIP": null,
         "comment": "已将重定向目标从[[Oxygennotincluded Wiki]]更改为[[首页]]"
       },
+      {
+        "id": 78,
+        "title": "Template:Fairuse/doc",
+        "ns": 10,
+        "redirect_title": "",
+        "latest_timestamp": "2021-07-07T09:45:55Z",
+        "contributorId": "49009184",
+        "contributorName": "DDElephantBot",
+        "contributorIP": null,
+        "comment": "Switch cats to zh-hans"
+      },
+      {
+        "id": 6,
+        "title": "User:机智的小鱼君",
+        "ns": 2,
+        "redirect_title": "",
+        "latest_timestamp": "2021-05-12T06:28:52Z",
+        "contributorId": "32769624",
+        "contributorName": "FANDOM",
+        "contributorIP": null,
+        "comment": "导入1个版本"
+      }
     ])
     const pageDocTitles = ref(new Map())
+    const pageItems = computed(() => {
+      let pages = _pageItems.value
+      return props.filterFunc(pages)
+    })
 
+    // func
     function resetFilter() {
       itemFilter.value = ""
     }
-    const pageItems = computed(() => {
-      if (itemFilter.value == "" || itemFilter.value == undefined) {
-        return _pageItems.value
-      }
-      return _pageItems.value.filter(obj => obj.title.toLowerCase().includes(itemFilter.value.toLowerCase()));
-    })
-
     function loadPagesData(ns) {
       let reqUrl = API.pagelist
       if (props.ns != undefined) {
@@ -131,12 +159,12 @@ export default {
         .catch(error => console.log(error));
     }
 
-    function getDocUrl(item){
+    function getDocUrl(item) {
       if (item.title.endsWith("/doc")) {
         return undefined
       }
       const doc = pageDocTitles.value[item.id]
-      if(doc){
+      if (doc) {
         return WikiSite.baseUrl + doc
       }
       return undefined
