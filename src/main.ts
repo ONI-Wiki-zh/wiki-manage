@@ -15,9 +15,13 @@ import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+import { IconOptions } from "vuetify/dist/vuetify-labs.js";
 const vuetify = createVuetify({
   components,
   directives,
+  icons: <IconOptions>{
+    iconfont: "mdi",
+  },
 });
 
 createApp(App)
