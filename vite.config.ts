@@ -11,4 +11,7 @@ export default defineConfig({
       exclude: ["**/components/*.vue"],
     }),
   ],
+  build: {
+    assetsDir: 'static'
+  },
 })
