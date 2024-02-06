@@ -1,6 +1,9 @@
 <template>
   <PageList :ns="828" :filterFunc="itemFilter" lang="lua">
-    <v-checkbox label="包含帮助文档页面" v-model="isShowHelpDoc"></v-checkbox>
+    <div class="d-flex">
+      <v-checkbox label="包含帮助文档页面" v-model="isShowHelpDoc"></v-checkbox>
+      <v-checkbox label="包含Fandom作者" v-model="isShowFandomPage"></v-checkbox>
+    </div>
   </PageList>
 </template>
 <script>
@@ -12,10 +15,14 @@ export default {
   },
   setup() {
     const isShowHelpDoc = ref(false)
+    const isShowFandomPage = ref(false)
     function itemFilter(data, itemFilter) {
       let pages = data
       if (!isShowHelpDoc.value) {
         pages = pages.filter(obj => !obj.title.endsWith("/doc"))
+      }
+      if (!isShowFandomPage.value) {
+        pages = pages.filter(obj => obj.contributorId != 32769624)
       }
       return pages
     }
@@ -23,6 +30,7 @@ export default {
     return {
       //Data
       isShowHelpDoc,
+      isShowFandomPage,
       // Func
       itemFilter
     }

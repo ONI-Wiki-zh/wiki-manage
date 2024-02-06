@@ -1,41 +1,50 @@
 <template>
-  <div class="ma-8">
-    <v-text-field v-model="itemFilter" variant="solo" class="ma-2" hide-details="true">
-      <template v-slot:prepend-inner>
-        <v-icon>mdi-magnify</v-icon>
-      </template>
-      <template v-slot:append-inner>
-        <v-icon v-show="itemFilter !== ''" @click="resetFilter">mdi-close</v-icon>
-      </template>
-    </v-text-field>
-    <slot></slot>
-    <v-data-table :headers="headers" :items="pageItems" item-key="id" items-per-page="20" :sort-by="[]" multi-sort>
-      <template v-slot:item.title="{ item }">
-        <span>
-          <span>{{ item.title }}</span>
-        </span>
-      </template>
-      <template v-slot:item.contributorName="{ item }">
-        <div v-if="item.contributorName != undefined">
-          <UserInfo :name="item.contributorName" :authority="item.authority"></UserInfo>
-        </div>
-        <div v-if="item.contributorName == undefined">
-          {{ item.contributorIP }}
-        </div>
-      </template>
-      <template v-slot:item.action="{ item }">
-        <div class="container-action">
-          <a v-show="pageDocTitles[item.id] != undefined" :href="getDocUrl(item)"
-            target="_blank"><v-icon>mdi-help-circle-outline</v-icon></a>
-          <a :href="`${WikiSite.baseUrl}${item.title}`" target="_blank" style="color:black"><v-icon
-              color="black">mdi-link</v-icon></a>
-          <span>&nbsp;</span>
-          <router-link :to="{ name: 'DiffWikiPage', query: { pageid: item.id.toString(), revisionId: item.revisionId.toString(), lang: props.lang}}" target="_blank">
-            <v-btn color="primary" @click="getDocUrl(item)">对比</v-btn>
-          </router-link>
-        </div>
-      </template>
-    </v-data-table>
+  <div id="app" class="pa-8">
+    <v-row>
+      <v-text-field v-model="itemFilter" variant="solo" class="ma-2" hide-details="true">
+        <template v-slot:prepend-inner>
+          <v-icon>mdi-magnify</v-icon>
+        </template>
+        <template v-slot:append-inner>
+          <v-icon v-show="itemFilter !== ''" @click="resetFilter">mdi-close</v-icon>
+        </template>
+      </v-text-field>
+    </v-row>
+    <v-row>
+      <slot></slot>
+    </v-row>
+    <v-row class="bottom-row">
+      <v-data-table :headers="headers" :items="pageItems" item-key="id" items-per-page="20" :fixed-header="true"
+        :fixed-footer="true" :sort-by="[]" multi-sort>
+        <template v-slot:item.title="{ item }">
+          <span>
+            <span>{{ item.title }}</span>
+          </span>
+        </template>
+        <template v-slot:item.contributorName="{ item }">
+          <div v-if="item.contributorName != undefined">
+            <UserInfo :name="item.contributorName" :authority="item.authority"></UserInfo>
+          </div>
+          <div v-if="item.contributorName == undefined">
+            {{ item.contributorIP }}
+          </div>
+        </template>
+        <template v-slot:item.action="{ item }">
+          <div class="container-action">
+            <a v-show="pageDocTitles[item.id] != undefined" :href="getDocUrl(item)"
+              target="_blank"><v-icon>mdi-help-circle-outline</v-icon></a>
+            <a :href="`${WikiSite.baseUrl}${item.title}`" target="_blank" style="color:black"><v-icon
+                color="black">mdi-link</v-icon></a>
+            <span>&nbsp;</span>
+            <router-link
+              :to="{ name: 'DiffWikiPage', query: { pageid: item.id.toString(), revisionId: item.revisionId.toString(), lang: props.lang } }"
+              target="_blank">
+              <v-btn color="primary" @click="getDocUrl(item)">对比</v-btn>
+            </router-link>
+          </div>
+        </template>
+      </v-data-table>
+    </v-row>
   </div>
 </template>
 <script>
@@ -152,10 +161,22 @@ export default {
 </script>
 
 <style scoped>
+#app {
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .container-action {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   flex-direction: row;
+}
+
+.bottom-row {
+  height: calc(100vh);
+  overflow-y: auto;
 }
 </style>
