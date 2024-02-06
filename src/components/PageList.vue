@@ -81,6 +81,9 @@ export default {
     const pageDocTitles = ref(new Map())
     const pageItems = computed(() => {
       let pages = _pageItems.value
+      if (!(itemFilter.value == "" || itemFilter.value == undefined)) {
+        pages = pages.filter(obj => obj.title.toLowerCase().includes(itemFilter.value.toLowerCase()));
+      }
       return props.filterFunc(pages)
     })
 

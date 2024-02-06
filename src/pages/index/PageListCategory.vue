@@ -1,6 +1,5 @@
 <template>
   <PageList :ns="14" :filterFunc="itemFilter">
-    <v-checkbox label="包含帮助文档页面" v-model="isShowHelpDoc"></v-checkbox>
   </PageList>
 </template>
 <script>
@@ -14,10 +13,7 @@ export default {
     const isShowHelpDoc = ref(false)
     function itemFilter(data, itemFilter) {
       let pages = data
-      if (itemFilter == "" || itemFilter == undefined) {
-        return pages
-      }
-      return pages.filter(obj => obj.title.toLowerCase().includes(itemFilter.toLowerCase()));
+      return pages
     }
 
     return {

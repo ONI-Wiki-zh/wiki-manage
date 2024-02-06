@@ -26,12 +26,7 @@ export default {
       if (!isShowFandomPage.value) {
         pages = pages.filter(obj => obj.contributorId != 32769624)
       }
-      // 关键词
-      if (itemFilter == "" || itemFilter == undefined) {
-        return pages
-      } else {
-        return pages.filter(obj => obj.title.toLowerCase().includes(itemFilter.toLowerCase()));
-      }
+      return pages
     }
 
     return {

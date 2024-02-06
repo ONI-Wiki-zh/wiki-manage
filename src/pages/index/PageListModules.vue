@@ -12,16 +12,12 @@ export default {
   },
   setup() {
     const isShowHelpDoc = ref(false)
-    const isShowPreload = ref(true)
     function itemFilter(data, itemFilter) {
       let pages = data
       if (!isShowHelpDoc.value) {
         pages = pages.filter(obj => !obj.title.endsWith("/doc"))
       }
-      if (itemFilter == "" || itemFilter == undefined) {
-        return pages
-      }
-      return pages.filter(obj => obj.title.toLowerCase().includes(itemFilter.toLowerCase()));
+      return pages
     }
 
     return {

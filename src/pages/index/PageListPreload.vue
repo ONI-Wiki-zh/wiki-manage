@@ -18,10 +18,7 @@ export default {
       if (!isShowHelpDoc.value) {
         pages = pages.filter(obj => !obj.title.endsWith("/doc"))
       }
-      if (itemFilter == "" || itemFilter == undefined) {
-        return pages
-      }
-      return pages.filter(obj => obj.title.toLowerCase().includes(itemFilter.toLowerCase()));
+      return pages
     }
 
     return {
