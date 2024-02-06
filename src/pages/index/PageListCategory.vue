@@ -1,5 +1,5 @@
 <template>
-  <PageList :ns="10" :filterFunc="itemFilter">
+  <PageList :ns="14" :filterFunc="itemFilter">
     <v-checkbox label="包含帮助文档页面" v-model="isShowHelpDoc"></v-checkbox>
   </PageList>
 </template>
@@ -14,10 +14,6 @@ export default {
     const isShowHelpDoc = ref(false)
     function itemFilter(data, itemFilter) {
       let pages = data
-      pages = pages.filter(obj => obj.ns == 14)
-      if (!isShowHelpDoc.value) {
-        pages = pages.filter(obj => !obj.title.endsWith("/doc"))
-      }
       if (itemFilter == "" || itemFilter == undefined) {
         return pages
       }

@@ -15,7 +15,6 @@ export default {
     const isShowPreload = ref(true)
     function itemFilter(data, itemFilter) {
       let pages = data
-      pages = pages.filter(obj => obj.ns == 828)
       if (!isShowHelpDoc.value) {
         pages = pages.filter(obj => !obj.title.endsWith("/doc"))
       }

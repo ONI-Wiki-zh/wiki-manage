@@ -5,7 +5,7 @@
         <v-icon>mdi-magnify</v-icon>
       </template>
       <template v-slot:append-inner>
-        <v-icon v-if="itemFilter !== ''" @click="resetFilter">mdi-close</v-icon>
+        <v-icon v-show="itemFilter !== ''" @click="resetFilter">mdi-close</v-icon>
       </template>
     </v-text-field>
     <slot></slot>
@@ -13,11 +13,6 @@
       <template v-slot:item.title="{ item }">
         <span>
           <span>{{ item.title }}</span>
-          <span>&nbsp;</span>
-          <a :href="`${WikiSite.baseUrl}${item.title}`" target="_blank" style="color:black"><v-icon
-              color="black">mdi-link</v-icon></a>
-          <a v-if="pageDocTitles[item.id]" :href="getDocUrl(item)"
-            target="_blank"><v-icon>mdi-help-circle-outline</v-icon></a>
         </span>
       </template>
       <template v-slot:item.contributorName="{ item }">
@@ -35,7 +30,14 @@
         </div>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-btn color="primary" @click="getDocUrl(item)">对比</v-btn>
+        <div class="container-action">
+          <a v-show="pageDocTitles[item.id] != undefined" :href="getDocUrl(item)"
+            target="_blank"><v-icon>mdi-help-circle-outline</v-icon></a>
+          <a :href="`${WikiSite.baseUrl}${item.title}`" target="_blank" style="color:black"><v-icon
+              color="black">mdi-link</v-icon></a>
+          <span>&nbsp;</span>
+          <v-btn color="primary" @click="getDocUrl(item)">对比</v-btn>
+        </div>
       </template>
     </v-data-table>
   </div>
@@ -64,7 +66,7 @@ export default {
   data: () => ({
     headers: [
       { title: '名称', key: 'title', width: "15%" },
-      { title: '上次编辑者', key: 'contributorName', minWidth:"100px" },
+      { title: '上次编辑者', key: 'contributorName', minWidth: "100px" },
       { title: '上次编辑时间', key: 'latest_timestamp' },
       { title: '提交信息', key: 'comment', width: "40%" },
       { title: '操作', key: 'action', align: "center", sortable: false }
@@ -189,4 +191,11 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.container-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: row;
+}
+</style>
