@@ -1,18 +1,17 @@
 <template>
   <div>
     <v-row>
-      <v-col>
+      <v-col class="container-info">
         <UserInfo :name="oldContributor.user_name"></UserInfo>
+        <ItemDiffInfo :timestamp="oldPage.timestamp" :comment="oldPage.comment"></ItemDiffInfo>
       </v-col>
-      <v-col>
-        <UserInfo :name="oldContributor.user_name"></UserInfo>
+      <v-col class="container-info">
+        <UserInfo :name="newContributor.user_name"></UserInfo>
+        <ItemDiffInfo :timestamp="newPage.timestamp" :comment="newPage.comment"></ItemDiffInfo>
       </v-col>
     </v-row>
-    <CodeDiff 
-    :filename="oldPage.timestamp" :newFilename="newPage.timestamp"
-    :old-string="oldPage.text" :new-string="newPage.text" 
-    :lang="language"
-    output-format="side-by-side" :context="10"></CodeDiff>
+    <CodeDiff :filename="oldPage.sha1" :newFilename="newPage.sha1" :old-string="oldPage.text"
+      :new-string="newPage.text" :lang="language" output-format="side-by-side" :context="10"></CodeDiff>
   </div>
 </template>
 
@@ -22,10 +21,12 @@ import { useRoute } from 'vue-router'
 import axios from 'axios';
 import { API } from '@src/constant'
 import UserInfo from '@src/components/UserInfo.vue'
+import ItemDiffInfo from '@src/components/ItemDiffInfo.vue'
 
 export default {
   components: {
     UserInfo,
+    ItemDiffInfo,
   },
   setup() {
     const router = useRoute();
@@ -75,7 +76,7 @@ export default {
       loadRevisionData(router.query.pageid, Number(router.query.revisionId), Number(router.query.oldId))
     })
 
-    watch(oldPage, (newValue, oldValue)=>{
+    watch(oldPage, (newValue, oldValue) => {
       let reqUrl = API.contributor + "?id=" + newValue.contributor_id
       axios.get(reqUrl)
         .then(res => {
@@ -87,7 +88,7 @@ export default {
         .catch(error => console.log(error));
     })
 
-    watch(newPage, (newValue, oldValue)=>{
+    watch(newPage, (newValue, oldValue) => {
       let reqUrl = API.contributor + "?id=" + newValue.contributor_id
       axios.get(reqUrl)
         .then(res => {
@@ -113,4 +114,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.container-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+</style>
