@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div id="app">
+    <v-row>
+      <div class="text-h6 font-weight-medium">
+        {{ pageFileInfo.title }}
+      </div>
+    </v-row>
     <v-row>
       <v-col class="container-info">
         <UserInfo :name="oldContributor.user_name"></UserInfo>
@@ -10,8 +15,10 @@
         <ItemDiffInfo :timestamp="newPage.timestamp" :comment="newPage.comment"></ItemDiffInfo>
       </v-col>
     </v-row>
-    <CodeDiff :filename="oldPage.sha1" :newFilename="newPage.sha1" :old-string="oldPage.text"
-      :new-string="newPage.text" :lang="language" output-format="side-by-side" :context="10"></CodeDiff>
+    <v-row class="bottom-row">
+      <CodeDiff :filename="oldPage.sha1" :newFilename="newPage.sha1" :old-string="oldPage.text" :new-string="newPage.text"
+        :lang="language" output-format="side-by-side" :context="10"></CodeDiff>
+    </v-row>
   </div>
 </template>
 
@@ -31,6 +38,7 @@ export default {
   setup() {
     const router = useRoute();
     const pageid = ref(0)
+    const pageFileInfo = ref({})
     const oldId = ref(0)
     const newId = ref(0)
     const language = ref("plaintext")
@@ -55,6 +63,20 @@ export default {
       }
     }
 
+    function loadPageData(pageid){
+      let reqUrl = API.pagelist + "?pageid=" + String(pageid)
+      axios.get(reqUrl)
+        .then(res => {
+          if (res.status != 200 || res.headers['content-type'] != "application/json") {
+            return
+          }
+          if(res.data.length>0){
+            pageFileInfo.value = res.data[0]
+          }
+        })
+        .catch(error => console.log(error));
+    }
+
     function loadRevisionData(pageid, newId, oldId) {
       let reqUrl = API.pagerevision + "?pageid=" + String(pageid)
       axios.get(reqUrl)
@@ -74,6 +96,7 @@ export default {
       newId.value = Number(router.query.revisionId)
       oldId.value = Number(router.query.oldId)
       loadRevisionData(router.query.pageid, Number(router.query.revisionId), Number(router.query.oldId))
+      loadPageData(router.query.pageid)
     })
 
     watch(oldPage, (newValue, oldValue) => {
@@ -104,6 +127,7 @@ export default {
       // Data
       language,
       pageid,
+      pageFileInfo,
       oldPage,
       newPage,
       oldContributor,
@@ -115,6 +139,21 @@ export default {
 </script>
 
 <style scoped>
+#app {
+  height: 100vh;
+  padding-inline: 32px;
+  padding-block: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-row {}
+
+.bottom-row {
+  overflow-y: auto;
+  height: calc(100vh);
+}
+
 .container-info {
   display: flex;
   flex-direction: column;
