@@ -1,5 +1,13 @@
 <template>
   <div>
+    <v-row>
+      <v-col>
+        <UserInfo :name="oldContributor.user_name"></UserInfo>
+      </v-col>
+      <v-col>
+        <UserInfo :name="oldContributor.user_name"></UserInfo>
+      </v-col>
+    </v-row>
     <CodeDiff 
     :filename="oldPage.timestamp" :newFilename="newPage.timestamp"
     :old-string="oldPage.text" :new-string="newPage.text" 
@@ -9,11 +17,16 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router'
 import axios from 'axios';
 import { API } from '@src/constant'
+import UserInfo from '@src/components/UserInfo.vue'
+
 export default {
+  components: {
+    UserInfo,
+  },
   setup() {
     const router = useRoute();
     const pageid = ref(0)
@@ -23,6 +36,8 @@ export default {
     const revisions = ref([])
     const oldPage = ref({})
     const newPage = ref({})
+    const oldContributor = ref({})
+    const newContributor = ref({})
 
     function selectRevision(newId, oldId) {
       // 新版本
@@ -60,12 +75,38 @@ export default {
       loadRevisionData(router.query.pageid, Number(router.query.revisionId), Number(router.query.oldId))
     })
 
+    watch(oldPage, (newValue, oldValue)=>{
+      let reqUrl = API.contributor + "?id=" + newValue.contributor_id
+      axios.get(reqUrl)
+        .then(res => {
+          if (res.status != 200 || res.headers['content-type'] != "application/json") {
+            return
+          }
+          oldContributor.value = res.data[0]
+        })
+        .catch(error => console.log(error));
+    })
+
+    watch(newPage, (newValue, oldValue)=>{
+      let reqUrl = API.contributor + "?id=" + newValue.contributor_id
+      axios.get(reqUrl)
+        .then(res => {
+          if (res.status != 200 || res.headers['content-type'] != "application/json") {
+            return
+          }
+          newContributor.value = res.data[0]
+        })
+        .catch(error => console.log(error));
+    })
+
     return {
       // Data
+      language,
       pageid,
       oldPage,
       newPage,
-      language,
+      oldContributor,
+      newContributor,
       //Func
     }
   }

@@ -17,13 +17,7 @@
       </template>
       <template v-slot:item.contributorName="{ item }">
         <div v-if="item.contributorName != undefined">
-          <v-list-item class="ma-0 pa-0">
-            <template v-slot:prepend>
-              <VueAvatar :username="item.contributorName" :size="32" class="ma-1"></VueAvatar>
-            </template>
-            <v-list-item-title>{{ item.contributorName }}</v-list-item-title>
-            <v-list-item-subtitle>{{ item.authority }}</v-list-item-subtitle>
-          </v-list-item>
+          <UserInfo :name="item.contributorName" :authority="item.authority"></UserInfo>
         </div>
         <div v-if="item.contributorName == undefined">
           {{ item.contributorIP }}
@@ -48,13 +42,12 @@
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { API, WikiSite } from '@src/constant'
-import VueAvatar from "@webzlodimir/vue-avatar";
-import "@webzlodimir/vue-avatar/dist/style.css";
+import UserInfo from '@src/components/UserInfo.vue'
 import mockpagedata from '@src/assets/data/pagelist.json'
 
 export default {
   components: {
-    VueAvatar,
+    UserInfo,
   },
   props: {
     ns: {
