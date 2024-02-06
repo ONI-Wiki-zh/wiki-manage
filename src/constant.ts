@@ -1,6 +1,7 @@
 export const API = {
     pagelist: "/api/pages",
-    pagedoc: "/api/pagesdoc"
+    pagedoc: "/api/pagesdoc",
+    pagerevision: "/api/pagerevision"
 }
 
 export const WikiSite = {

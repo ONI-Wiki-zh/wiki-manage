@@ -36,7 +36,9 @@
           <a :href="`${WikiSite.baseUrl}${item.title}`" target="_blank" style="color:black"><v-icon
               color="black">mdi-link</v-icon></a>
           <span>&nbsp;</span>
-          <v-btn color="primary" @click="getDocUrl(item)">对比</v-btn>
+          <router-link :to="{ name: 'DiffWikiPage', query: { pageid: item.id.toString(), revisionId: item.revisionId.toString(), lang: props.lang}}" target="_blank">
+            <v-btn color="primary" @click="getDocUrl(item)">对比</v-btn>
+          </router-link>
         </div>
       </template>
     </v-data-table>
@@ -48,7 +50,8 @@ import axios from 'axios';
 import { API, WikiSite } from '@src/constant'
 import VueAvatar from "@webzlodimir/vue-avatar";
 import "@webzlodimir/vue-avatar/dist/style.css";
-import { el, fa } from 'vuetify/locale';
+import mockpagedata from '@src/assets/data/pagelist.json'
+
 export default {
   components: {
     VueAvatar,
@@ -62,6 +65,11 @@ export default {
       type: Function,
       required: true
     },
+    lang: {
+      type: String,
+      required: false,
+      default: "plaintext"
+    }
   },
   data: () => ({
     headers: [
@@ -76,52 +84,7 @@ export default {
   },
   setup(props) {
     const itemFilter = ref("")
-    const _pageItems = ref([
-      {
-        "id": 1,
-        "title": "首页",
-        "ns": 0,
-        "redirect_title": "",
-        "latest_timestamp": "2023-01-16T08:15:32Z",
-        "contributorId": "45305602",
-        "contributorName": "Tuode",
-        "contributorIP": null,
-        "comment": "已保护“[[首页]]”：​高流量页面（[编辑=仅允许自动确认用户]（无限期）[移动=仅允许自动确认用户]（无限期））"
-      },
-      {
-        "id": 133,
-        "title": "Main Page",
-        "ns": 0,
-        "redirect_title": "首页",
-        "latest_timestamp": "2021-08-11T23:04:41Z",
-        "contributorId": "48974187",
-        "contributorName": "DDElephant",
-        "contributorIP": null,
-        "comment": "已将重定向目标从[[Oxygennotincluded Wiki]]更改为[[首页]]"
-      },
-      {
-        "id": 78,
-        "title": "Template:Fairuse/doc",
-        "ns": 10,
-        "redirect_title": "",
-        "latest_timestamp": "2021-07-07T09:45:55Z",
-        "contributorId": "49009184",
-        "contributorName": "DDElephantBot",
-        "contributorIP": null,
-        "comment": "Switch cats to zh-hans"
-      },
-      {
-        "id": 6,
-        "title": "User:机智的小鱼君",
-        "ns": 2,
-        "redirect_title": "",
-        "latest_timestamp": "2021-05-12T06:28:52Z",
-        "contributorId": "32769624",
-        "contributorName": "FANDOM",
-        "contributorIP": null,
-        "comment": "导入1个版本"
-      }
-    ])
+    const _pageItems = ref(mockpagedata)
     const pageDocTitles = ref(new Map())
     const pageItems = computed(() => {
       let pages = _pageItems.value
@@ -178,6 +141,7 @@ export default {
     })
     return {
       //Data
+      props,
       WikiSite,
       pageItems,
       pageDocTitles,
