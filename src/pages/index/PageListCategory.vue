@@ -1,6 +1,5 @@
 <template>
-  <PageList :ns="10" :filterFunc="itemFilter">
-    <v-checkbox label="包含帮助文档页面" v-model="isShowHelpDoc"></v-checkbox>
+  <PageList :ns="14" :filterFunc="itemFilter">
   </PageList>
 </template>
 <script>
@@ -14,10 +13,6 @@ export default {
     const isShowHelpDoc = ref(false)
     function itemFilter(data, itemFilter) {
       let pages = data
-      pages = pages.filter(obj => obj.title.startsWith("Template:Preload/"))
-      if (!isShowHelpDoc.value) {
-        pages = pages.filter(obj => !obj.title.endsWith("/doc"))
-      }
       return pages
     }
 

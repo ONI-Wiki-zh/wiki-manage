@@ -40,13 +40,16 @@
         <v-list-item v-bind="props" title="开发者页面"></v-list-item>
       </template>
       <router-link to="/PageListTemplates">
-        <v-list-item title="模板列表" value="pagelist-templates"></v-list-item>
+        <v-list-item title="模板" value="pagelist-templates"></v-list-item>
       </router-link>
       <router-link to="/PageListModules">
-        <v-list-item title="模块列表" value="pagelist-modules"></v-list-item>
+        <v-list-item title="模块" value="pagelist-modules"></v-list-item>
       </router-link>
       <router-link to="/PageListPreload">
-        <v-list-item title="预设模板列表" value="pagelist-preload"></v-list-item>
+        <v-list-item title="预设模板" value="pagelist-preload"></v-list-item>
+      </router-link>
+      <router-link to="/PageListCategory">
+        <v-list-item title="分类概述页面" value="pagelist-category"></v-list-item>
       </router-link>
     </v-list-group>
     <v-list-subheader>备份</v-list-subheader>
