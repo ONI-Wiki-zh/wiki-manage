@@ -19,7 +19,7 @@ export default {
     const isShowFandomPage = ref(false)
     function itemFilter(data, itemFilter) {
       let pages = data
-      pages = pages.filter(obj => obj.ns == 10 && !obj.title.startsWith("Template:Preload/"))
+      pages = pages.filter(obj => obj.title == "Template:Preload/doc" || !obj.title.startsWith("Template:Preload/"))
       if (!isShowHelpDoc.value) {
         pages = pages.filter(obj => !obj.title.endsWith("/doc"))
       }
