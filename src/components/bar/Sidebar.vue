@@ -20,10 +20,7 @@
         <v-list-item v-bind="props" title="页面校验"></v-list-item>
       </template>
       <router-link to="/VerifyText">
-        <v-list-item title="文案格式校对" value="verify-text"></v-list-item>
-      </router-link>
-      <router-link to="/VerifyLangLinks">
-        <v-list-item title="跨语言连接纠错" value="verify-langlinks"></v-list-item>
+        <v-list-item title="文案格式修正" value="verify-text"></v-list-item>
       </router-link>
     </v-list-group>
     <v-list-subheader>站点统计</v-list-subheader>
