@@ -20,7 +20,8 @@
       <v-data-table :headers="headers" :items="pageItems" item-key="id" items-per-page="20" :fixed-header="true"
         :fixed-footer="true" :sort-by="[]" multi-sort>
         <template v-slot:item.latest_timestamp="{ item }">
-          <a :href="`${WikiSite.baseUrl}${item.title}`" target="_blank"><span>{{ DateFromat.formatDate(item.latest_timestamp) }}</span></a>
+          <a :href="`${WikiSite.baseUrl}${item.title}`" target="_blank"><span>{{
+            DateFromat.formatDate(item.latest_timestamp) }}</span></a>
         </template>
         <template v-slot:item.outdated="{ item }">
           <v-icon v-show="item.outdated" color="red">mdi-alert-circle</v-icon>
@@ -50,10 +51,16 @@ export default {
   data: () => ({
     headers: [
       { title: '名称', key: 'title', width: "30%" },
-      { title: '上次更新旧于目标站点', key: 'outdated' },
-      { title: '多语言链接引用页面不存在', key: 'noneTargetLangPage' },
-      { title: '多语言链接单向引用', key: 'onewayLangLink' },
-      { title: '多语言链接反链不唯一', key: 'multiBackLangLinks' },
+      { title: '过时页面-相较于目标站点', key: 'outdated', align: 'center' },
+      {
+        title: '跨语言链接异常',
+        align: 'center',
+        children: [
+          { title: '引用页面不存在', key: 'noneTargetLangPage' },
+          { title: '单向引用', key: 'onewayLangLink' },
+          { title: '反链不唯一', key: 'multiBackLangLinks' },
+        ],
+      },
       { title: '上次编辑时间', key: 'latest_timestamp' },
     ],
   }),
@@ -117,6 +124,7 @@ export default {
         socket.addEventListener('close', (event) => {
           // 关闭链接
           console.log('WebSocket closed');
+          isQuerying.value = false
         });
         socket.addEventListener('message', (event) => {
           // 接收消息

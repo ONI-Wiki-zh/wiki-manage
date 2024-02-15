@@ -29,7 +29,7 @@
         <v-list-item v-bind="props" title="页面统计"></v-list-item>
       </template>
       <router-link to="/StatisticPageStatus">
-        <v-list-item title="页面状态" value="statistic-pagestatus"></v-list-item>
+        <v-list-item title="跨语言链接状态" value="statistic-pagestatus"></v-list-item>
       </router-link>
     </v-list-group>
     <v-list-group value="pagelist">
