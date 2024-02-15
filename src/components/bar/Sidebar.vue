@@ -26,10 +26,10 @@
     <v-list-subheader>站点统计</v-list-subheader>
     <v-list-group value="statistic">
       <template v-slot:activator="{ props }">
-        <v-list-item v-bind="props" title="页面状态"></v-list-item>
+        <v-list-item v-bind="props" title="页面统计"></v-list-item>
       </template>
-      <router-link to="/StatisticOutdated">
-        <v-list-item title="过时页面" value="statistic-outdated"></v-list-item>
+      <router-link to="/StatisticPageStatus">
+        <v-list-item title="页面状态" value="statistic-pagestatus"></v-list-item>
       </router-link>
     </v-list-group>
     <v-list-group value="pagelist">
