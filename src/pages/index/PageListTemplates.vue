@@ -9,7 +9,6 @@
 <script>
 import { ref } from 'vue';
 import PageList from '@src/components/PageList.vue'
-import { fa } from 'vuetify/locale';
 export default {
   components: {
     PageList
